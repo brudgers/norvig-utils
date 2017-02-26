@@ -14,13 +14,24 @@ Part of the exercise for =norvig-utils.org= is to learn package and system manag
 
   <<general-problem-solver>>
 #+END_SRC
-* Namespace
+* Package
 #+NAME: package-norvig-utils
-#+BEGIN_SRC lisp
-  (defpackage "norvig-utils"
-    (:use "common-lisp"))
+#+BEGIN_SRC lisp :noweb tangle
+  (defpackage :norvig-utils
+    (:use :common-lisp)
+    (;;; from eliza
+     :export :get-bindings
+             :binding-val
+             :lookup
+             :extend-bindings
+     ;;; from general-problem-solver
+             :member-equal
+             :find-all
+             :find-all-if
+             :starts-with
+             :mappend))
 
-  (in-package "norvig-utils")
+  (in-package :norvig-utils)
 #+END_SRC
 * Eliza
 Abstractions over association lists.
