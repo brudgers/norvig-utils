@@ -16,6 +16,10 @@
 
 (in-package :norvig-utils)
 
+(defsystem norvig-utils
+  :serial t
+  :components ((:file "norvig-utils")))
+
 ;;; Functions that abstract over association lists
 
 (defun get-bindings (var bindings)

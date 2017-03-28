@@ -32,6 +32,10 @@ Part of the exercise for =norvig-utils.org= is to learn package and system manag
              :mappend))
 
   (in-package :norvig-utils)
+
+  (defsystem norvig-utils
+    :serial t
+    :components ((:file "norvig-utils")))
 #+END_SRC
 * Eliza
 Abstractions over association lists.
@@ -108,6 +112,10 @@ The debugger is built as part of the General Problem Solver.
              :dbg-indent))
 
   (in-package :norvig-debugger)
+
+  (defsystem norvig-debugger
+    :serial t
+    :components ((:file "norvig-debugger")))
 
   (defvar *dbg-ids* nil
     "Identifiers used by dbg")

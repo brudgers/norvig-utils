@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-02-26 Sun 15:25 -->
+<!-- 2017-03-28 Tue 12:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Norvig Utilities</title>
@@ -233,9 +233,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org068dd56">Namespace</a></li>
-<li><a href="#org5b39bfc">Eliza</a></li>
-<li><a href="#org8dbf1fe">General Problem Solver</a></li>
+<li><a href="#orga7b2e8a">Package</a></li>
+<li><a href="#org7dc0e72">Eliza</a></li>
+<li><a href="#orgbe1fded">General Problem Solver</a></li>
+<li><a href="#orgf81bec6">Debugger</a></li>
 </ul>
 </div>
 </div>
@@ -257,21 +258,36 @@ Part of the exercise for <code>norvig-utils.org</code> is to learn package and s
 &lt;&lt;general-problem-solver&gt;&gt;
 </pre>
 </div>
-<div id="outline-container-org068dd56" class="outline-2">
-<h2 id="org068dd56">Namespace</h2>
-<div class="outline-text-2" id="text-org068dd56">
+<div id="outline-container-orga7b2e8a" class="outline-2">
+<h2 id="orga7b2e8a">Package</h2>
+<div class="outline-text-2" id="text-orga7b2e8a">
 <div class="org-src-container">
-<pre class="src src-lisp" id="org5bd82dc">(defpackage "norvig-utils"
-  (:use "common-lisp"))
+<pre class="src src-lisp" id="org97fe24f">(defpackage :norvig-utils
+  (:use :common-lisp)
+  (;;; from eliza
+   :export :get-bindings
+           :binding-val
+           :lookup
+           :extend-bindings
+   ;;; from general-problem-solver
+           :member-equal
+           :find-all
+           :find-all-if
+           :starts-with
+           :mappend))
 
-(in-package "norvig-utils")
+(in-package :norvig-utils)
+
+(defsystem norvig-utils
+  :serial t
+  :components ((:file "norvig-utils")))
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org5b39bfc" class="outline-2">
-<h2 id="org5b39bfc">Eliza</h2>
-<div class="outline-text-2" id="text-org5b39bfc">
+<div id="outline-container-org7dc0e72" class="outline-2">
+<h2 id="org7dc0e72">Eliza</h2>
+<div class="outline-text-2" id="text-org7dc0e72">
 <p>
 Abstractions over association lists.
 </p>
@@ -282,7 +298,7 @@ Abstractions over association lists.
 <li>extend-bindings</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-lisp" id="org27daf7f">;;; Functions that abstract over association lists
+<pre class="src src-lisp" id="orgd741c9d">;;; Functions that abstract over association lists
 
 (defun get-bindings (var bindings)
   "Find a (variable . value) pair in a binding list."
@@ -304,9 +320,9 @@ Abstractions over association lists.
 </div>
 </div>
 
-<div id="outline-container-org8dbf1fe" class="outline-2">
-<h2 id="org8dbf1fe">General Problem Solver</h2>
-<div class="outline-text-2" id="text-org8dbf1fe">
+<div id="outline-container-orgbe1fded" class="outline-2">
+<h2 id="orgbe1fded">General Problem Solver</h2>
+<div class="outline-text-2" id="text-orgbe1fded">
 <p>
 Functions:
 </p>
@@ -318,7 +334,7 @@ Functions:
 <li>mappend</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-lisp" id="orgc8636c6">(defun member-equal (item list)
+<pre class="src src-lisp" id="orgaf80317">(defun member-equal (item list)
   "Test for membership in a list as set using equal."
   (member item list :test #'equal))
 
@@ -348,10 +364,60 @@ Functions:
 </div>
 </div>
 </div>
+<div id="outline-container-orgf81bec6" class="outline-2">
+<h2 id="orgf81bec6">Debugger</h2>
+<div class="outline-text-2" id="text-orgf81bec6">
+<p>
+The debugger is built as part of the General Problem Solver.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(defpackage :norvig-debugger
+  (:use :common-lisp)
+  (:export :*dbg-ids*
+           :dbg
+           :start-debug
+           :undebug
+           :dbg-indent))
+
+(in-package :norvig-debugger)
+
+(defsystem norvig-debugger
+  :serial t
+  :components ((:file "norvig-debugger")))
+
+(defvar *dbg-ids* nil
+  "Identifiers used by dbg")
+
+(defun dbg (id format-string &amp;rest args)
+  "Print debugging information if (DEBUG-ID) has been specified."
+  (when (member id *dbg-ids*)
+    (fresh-line *debug-io*)
+    (apply #'format *debug-io* format-string args)))
+
+;;; Using start-debugging because 'debug' reserved in SBCL
+(defun start-debug (&amp;rest ids)
+  "Start dbg output on the given ids."
+  (setf *dbg-ids* (union ids *dbg-ids*)))
+
+(defun undebug (&amp;rest ids)
+  "Stop dbg on the ids. With no ids, stop debugging altogether."
+  (setf *dbg-ids* (if (null ids) nil
+                    (set-difference *dbg-ids* ids))))
+
+(defun dbg-indent (id indent format-string &amp;rest args)
+  "Print indented debugging info if (DEBUG ID) has been specified."
+  (when (member id *dbg-ids*)
+    (fresh-line *debug-io*)
+    (dotimes (i indent) (princ "   " *debug-io*))
+    (apply #'format *debug-io* format-string args)))
+</pre>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: benrudgers</p>
-<p class="date">Created: 2017-02-26 Sun 15:25</p>
+<p class="date">Created: 2017-03-28 Tue 12:29</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
