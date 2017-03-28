@@ -14,9 +14,10 @@ Part of the exercise for =norvig-utils.org= is to learn package and system manag
 
   <<general-problem-solver>>
 #+END_SRC
-* Package
-#+NAME: package-norvig-utils
-#+BEGIN_SRC lisp :noweb tangle
+* Utilities
+** System
+#+NAME: system-norvig-utils
+#+BEGIN_SRC lisp :tangle norvig-utils.asd
   (defpackage :norvig-utils
     (:use :common-lisp)
     (;;; from eliza
@@ -37,72 +38,82 @@ Part of the exercise for =norvig-utils.org= is to learn package and system manag
     :serial t
     :components ((:file "norvig-utils")))
 #+END_SRC
-* Eliza
-Abstractions over association lists.
-+ get-bindings
-+ binding-val
-+ lookup
-+ extend-bindings
-#+NAME: eliza
-#+BEGIN_SRC lisp
-  ;;; Functions that abstract over association lists
+** norvig-utils
+#+NAME: norvig-utils
+#+BEGIN_SRC lisp :noweb tangle :tangle norvig-utils.lisp
+  (in-package :norvig-utils)
 
-  (defun get-bindings (var bindings)
-    "Find a (variable . value) pair in a binding list."
-    (assoc var bindings))
+  <<eliza>>
 
-  (defun binding-val (binding)
-    "Get the value part of a single binding."
-    (cdr binding))
-
-  (defun lookup (var bindings)
-    "Get the value part (for var) from a binding list."
-    (binding-val (get-bindings var bindings)))
-
-  (defun extend-bindings (var val bindings)
-    "Add a (var . value) pair to a binding list."
-    (cons (cons var val) bindings))
+  <<general-problem-solver>>
 #+END_SRC
+** Eliza
+ Abstractions over association lists.
+ + get-bindings
+ + binding-val
+ + lookup
+ + extend-bindings
+ #+NAME: eliza
+ #+BEGIN_SRC lisp
+   ;;; Functions that abstract over association lists
 
-* General Problem Solver
-Functions:
-+ member-equal
-+ find-all
-+ find-all-if
-+ starts-with
-+ mappend
-#+NAME: general-problem-solver
-#+BEGIN_SRC lisp
-  (defun member-equal (item list)
-    "Test for membership in a list as set using equal."
-    (member item list :test #'equal))
+   (defun get-bindings (var bindings)
+     "Find a (variable . value) pair in a binding list."
+     (assoc var bindings))
 
-  (setf (symbol-function 'find-all-if) #'remove-if-not)
+   (defun binding-val (binding)
+     "Get the value part of a single binding."
+     (cdr binding))
 
-  (defun find-all (item sequence &rest keyword-args
-                   &key (test #'eql)
-                     test-not
-                     &allow-other-keys)
-    "Find all those elements of sequence that match item.
-     according to the keywords. Does not alter sequence"
-    (if test-not
-        (apply #'remove item sequence
-               :test-not (complement test-not) keyword-args)
-        (apply #'remove item sequence
-               :test (complement test) keyword-args)))
+   (defun lookup (var bindings)
+     "Get the value part (for var) from a binding list."
+     (binding-val (get-bindings var bindings)))
 
-  (defun starts-with (list x)
-    "Is this a list whose first element is x?"
-    (and (consp list)
-         (eql (first list) x)))
+   (defun extend-bindings (var val bindings)
+     "Add a (var . value) pair to a binding list."
+     (cons (cons var val) bindings))
+ #+END_SRC
 
-  (defun mappend (fn the-list)
-    "Apply function to each element of the list and append the results."
-    (apply #'append (mapcar fn the-list)))
-#+END_SRC
+** General Problem Solver
+ Functions:
+ + member-equal
+ + find-all
+ + find-all-if
+ + starts-with
+ + mappend
+ #+NAME: general-problem-solver
+ #+BEGIN_SRC lisp
+   (defun member-equal (item list)
+     "Test for membership in a list as set using equal."
+     (member item list :test #'equal))
+
+   (setf (symbol-function 'find-all-if) #'remove-if-not)
+
+   (defun find-all (item sequence &rest keyword-args
+                    &key (test #'eql)
+                      test-not
+                      &allow-other-keys)
+     "Find all those elements of sequence that match item.
+      according to the keywords. Does not alter sequence"
+     (if test-not
+         (apply #'remove item sequence
+                :test-not (complement test-not) keyword-args)
+         (apply #'remove item sequence
+                :test (complement test) keyword-args)))
+
+   (defun starts-with (list x)
+     "Is this a list whose first element is x?"
+     (and (consp list)
+          (eql (first list) x)))
+
+   (defun mappend (fn the-list)
+     "Apply function to each element of the list and append the results."
+     (apply #'append (mapcar fn the-list)))
+ #+END_SRC
 * Debugger
-The debugger is built as part of the General Problem Solver.
-#+BEGIN_SRC lisp :tangle norvig-debugger.lisp
+** System
+#+NAME: debugger-system
+#+BEGIN_SRC lisp :tangle norvig-debugger.asd
   (defpackage :norvig-debugger
     (:use :common-lisp)
     (:export :*dbg-ids*
@@ -116,6 +127,11 @@ The debugger is built as part of the General Problem Solver.
   (defsystem norvig-debugger
     :serial t
     :components ((:file "norvig-debugger")))
+#+END_SRC
+** Functions
+The debugger is built as part of the General Problem Solver.
+#+BEGIN_SRC lisp :tangle norvig-debugger.lisp
+  (in-package :norvig-debugger)
 
   (defvar *dbg-ids* nil
     "Identifiers used by dbg")

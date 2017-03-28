@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-03-28 Tue 12:29 -->
+<!-- 2017-03-28 Tue 12:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Norvig Utilities</title>
@@ -233,10 +233,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga7b2e8a">Package</a></li>
-<li><a href="#org7dc0e72">Eliza</a></li>
-<li><a href="#orgbe1fded">General Problem Solver</a></li>
-<li><a href="#orgf81bec6">Debugger</a></li>
+<li><a href="#orgbb83fa7">Utilities</a>
+<ul>
+<li><a href="#org987ab6b">System</a></li>
+<li><a href="#org74ce8bd">norvig-utils</a></li>
+<li><a href="#orge88bf45">Eliza</a></li>
+<li><a href="#org0814d12">General Problem Solver</a></li>
+</ul>
+</li>
+<li><a href="#org2299250">Debugger</a>
+<ul>
+<li><a href="#orgc6cbbd6">System</a></li>
+<li><a href="#org299f843">Functions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -258,11 +268,14 @@ Part of the exercise for <code>norvig-utils.org</code> is to learn package and s
 &lt;&lt;general-problem-solver&gt;&gt;
 </pre>
 </div>
-<div id="outline-container-orga7b2e8a" class="outline-2">
-<h2 id="orga7b2e8a">Package</h2>
-<div class="outline-text-2" id="text-orga7b2e8a">
+<div id="outline-container-orgbb83fa7" class="outline-2">
+<h2 id="orgbb83fa7">Utilities</h2>
+<div class="outline-text-2" id="text-orgbb83fa7">
+</div><div id="outline-container-org987ab6b" class="outline-3">
+<h3 id="org987ab6b">System</h3>
+<div class="outline-text-3" id="text-org987ab6b">
 <div class="org-src-container">
-<pre class="src src-lisp" id="org97fe24f">(defpackage :norvig-utils
+<pre class="src src-lisp" id="org1e64dce">(defpackage :norvig-utils
   (:use :common-lisp)
   (;;; from eliza
    :export :get-bindings
@@ -285,9 +298,22 @@ Part of the exercise for <code>norvig-utils.org</code> is to learn package and s
 </div>
 </div>
 </div>
-<div id="outline-container-org7dc0e72" class="outline-2">
-<h2 id="org7dc0e72">Eliza</h2>
-<div class="outline-text-2" id="text-org7dc0e72">
+<div id="outline-container-org74ce8bd" class="outline-3">
+<h3 id="org74ce8bd">norvig-utils</h3>
+<div class="outline-text-3" id="text-org74ce8bd">
+<div class="org-src-container">
+<pre class="src src-lisp" id="org50a0cff">(in-package :norvig-utils)
+
+&lt;&lt;eliza&gt;&gt;
+
+&lt;&lt;general-problem-solver&gt;&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge88bf45" class="outline-3">
+<h3 id="orge88bf45">Eliza</h3>
+<div class="outline-text-3" id="text-orge88bf45">
 <p>
 Abstractions over association lists.
 </p>
@@ -298,7 +324,7 @@ Abstractions over association lists.
 <li>extend-bindings</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-lisp" id="orgd741c9d">;;; Functions that abstract over association lists
+<pre class="src src-lisp" id="orga352433">;;; Functions that abstract over association lists
 
 (defun get-bindings (var bindings)
   "Find a (variable . value) pair in a binding list."
@@ -320,9 +346,9 @@ Abstractions over association lists.
 </div>
 </div>
 
-<div id="outline-container-orgbe1fded" class="outline-2">
-<h2 id="orgbe1fded">General Problem Solver</h2>
-<div class="outline-text-2" id="text-orgbe1fded">
+<div id="outline-container-org0814d12" class="outline-3">
+<h3 id="org0814d12">General Problem Solver</h3>
+<div class="outline-text-3" id="text-org0814d12">
 <p>
 Functions:
 </p>
@@ -334,7 +360,7 @@ Functions:
 <li>mappend</li>
 </ul>
 <div class="org-src-container">
-<pre class="src src-lisp" id="orgaf80317">(defun member-equal (item list)
+<pre class="src src-lisp" id="orgf90296e">(defun member-equal (item list)
   "Test for membership in a list as set using equal."
   (member item list :test #'equal))
 
@@ -364,14 +390,15 @@ Functions:
 </div>
 </div>
 </div>
-<div id="outline-container-orgf81bec6" class="outline-2">
-<h2 id="orgf81bec6">Debugger</h2>
-<div class="outline-text-2" id="text-orgf81bec6">
-<p>
-The debugger is built as part of the General Problem Solver.
-</p>
+</div>
+<div id="outline-container-org2299250" class="outline-2">
+<h2 id="org2299250">Debugger</h2>
+<div class="outline-text-2" id="text-org2299250">
+</div><div id="outline-container-orgc6cbbd6" class="outline-3">
+<h3 id="orgc6cbbd6">System</h3>
+<div class="outline-text-3" id="text-orgc6cbbd6">
 <div class="org-src-container">
-<pre class="src src-lisp">(defpackage :norvig-debugger
+<pre class="src src-lisp" id="org72675f2">(defpackage :norvig-debugger
   (:use :common-lisp)
   (:export :*dbg-ids*
            :dbg
@@ -384,6 +411,18 @@ The debugger is built as part of the General Problem Solver.
 (defsystem norvig-debugger
   :serial t
   :components ((:file "norvig-debugger")))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org299f843" class="outline-3">
+<h3 id="org299f843">Functions</h3>
+<div class="outline-text-3" id="text-org299f843">
+<p>
+The debugger is built as part of the General Problem Solver.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(in-package :norvig-debugger)
 
 (defvar *dbg-ids* nil
   "Identifiers used by dbg")
@@ -415,9 +454,10 @@ The debugger is built as part of the General Problem Solver.
 </div>
 </div>
 </div>
+</div>
 <div id="postamble" class="status">
 <p class="author">Author: benrudgers</p>
-<p class="date">Created: 2017-03-28 Tue 12:29</p>
+<p class="date">Created: 2017-03-28 Tue 12:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
